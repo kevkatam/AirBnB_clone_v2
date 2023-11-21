@@ -118,7 +118,7 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        mylist = args.split(' ')
+        mylist = args.split()
         if mylist[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
@@ -129,10 +129,9 @@ class HBNBCommand(cmd.Cmd):
 
         for i in range(1, len(mylist)):
             mylist[i] = mylist[i].replace('=', ' ')
-            mylist[i] = mylist[i].split()
-            attrs = mylist[i]
+            attrs = mylist[i].split(' ')
+            attrs[1] = attrs[1].replace('"', '\\"')
             attrs[1] = attrs[1].replace('_', ' ')
-            attrs[1] = attrs[1].replace('"', '\"')
             if type(attrs[1]) is not tuple:
                 setattr(new_instance, attrs[0], attrs[1])
         storage.save()
