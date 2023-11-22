@@ -133,7 +133,7 @@ class HBNBCommand(cmd.Cmd):
             attrs = mylist[i].split(' ')
             attrs[1] = attrs[1].replace('"', '\\"')
             attrs[1] = attrs[1].replace('_', ' ')
-            if type(attrs[1] is not tuple):
+            if (type(attrs[1]) is not tuple):
                 setattr(new_instance, attrs[0], attrs[1])
         new_instance.save()
 
