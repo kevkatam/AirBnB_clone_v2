@@ -32,7 +32,7 @@ class DBStorage:
                                       format(user, password, host, database),
                                       pool_pre_ping=True)
         if env == "test":
-            Base.metadate.drop_all(self.__engine)
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """ method that queries current database session all objects depending
@@ -65,7 +65,7 @@ class DBStorage:
     def delete(self, obj=None):
         """ delete from the current database session obj if not None """
         if obj is not None:
-            self.__session.delete()
+            self.__session.delete(obj)
 
     def reload(self):
         """ create all tables in the database, create the current database
