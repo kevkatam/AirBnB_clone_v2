@@ -6,19 +6,23 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 from os import getenv
-from models.base_model import Base
+from models.base_model import BaseModel, Base
 from models.city import City
 from models.state import State
 from models.place import Place
 from models.review import Review
 from models.user import User
 from models.amenity import Amenity
+import models
 
 
 class DBStorage:
     """ class for DBStorage """
     __engine = None
     __session = None
+
+    classes = {"User": User, "State": State, "City": City, "Amenity": Amenity,
+               "Place": Place, "Review": Review}
 
     def __init__(self):
         """ initializes the dataa """
@@ -35,24 +39,15 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """ method that queries current database session all objects depending
-        of the class name """
-        d = {}
-        if cls is not None:
-            if (type(cls) is str):
-                cls = eval(cls)
-            query = self.__session.query(cls)
-            for i in query:
-                key = "{}.{}".format(i.__class__.__name__, i.id)
-                d[key] = i
-        else:
-            classlist = [User, State, City, Amenity, Place, Review]
-            for c in classlist:
-                query = self.__session.query(c)
-                for i in query:
-                    key = "{}.{}".format(i.__class__.__name__, i.id)
-                    d[key] = i
-        return (d)
+        """ query on the current database session """
+        dic = {}
+        for c in classes:
+            if cls is None or cls is classes[c] or cls is c:
+                query = self.__session.query(classes[c]).all()
+                for elem in query:
+                    key = "{}.{}".format(elem.__class__.__name__, elem.id)
+                    dic[key] = elem
+        return (dic)
 
     def new(self, obj):
         """ adds object to the current database session """

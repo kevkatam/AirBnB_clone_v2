@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import models
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -119,22 +120,20 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        mylist = args.split()
+        mylist = shlex.split(args)
         if mylist[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[mylist[0]]()
-        storage.save()
+ 
         print(new_instance.id)
-        storage.save()
 
         for i in range(1, len(mylist)):
             mylist[i] = mylist[i].replace('=', ' ')
             attrs = mylist[i].split(' ')
             attrs[1] = attrs[1].replace('\"', '')
             attrs[1] = attrs[1].replace('_', ' ')
-            if type(attrs[1]) is not tuple:
-                setattr(new_instance, attrs[0], attrs[1])
+            setattr(new_instance, attrs[0], attrs[1])
         storage.save()
 
     def help_create(self):
