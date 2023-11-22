@@ -20,15 +20,9 @@ class State(BaseModel, Base):
     def cities(self):
         """ getter attribute cities that returns the list of City instances
         with state_id equals to the current State.id """
-        objs = models.storage.all()
+        allCities = models.storage.all(City)
         citylist = []
-        statidlist = []
-        for key in objs:
-            city = key.replace('.', ' ')
-            city = shlex.split(city)
-            if (city[0] == 'City'):
-                citylist.append(objs[key])
-        for i in citylist:
-            if (i.state_id == self.id):
-                stateidlist.append(i)
-        return (stateidlist)
+        for city in allCities.values():
+            if city.state_id == self.id:
+                citylist.append(city)
+        return (citylist)
