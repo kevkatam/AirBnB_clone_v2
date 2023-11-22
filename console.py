@@ -14,6 +14,12 @@ from models.review import Review
 import shlex
 
 
+classes = {
+               'User': User, 'Place': Place, 'State': State, 'City': City,
+               'Amenity': Amenity, 'Review': Review
+          }
+
+
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
@@ -129,6 +135,7 @@ class HBNBCommand(cmd.Cmd):
                     try:
                         value = int(value)
                     except:
+                        continue
                         try:
                             value = float(value)
                         except:
@@ -136,18 +143,21 @@ class HBNBCommand(cmd.Cmd):
                 dic[key] = value
         return (dic)
 
-    def do_create(self, args):
+    def do_create(self, arg):
         """ Create an object of any class"""
-        if not args:
+        if not arg:
             print("** class name missing **")
             return
-        mylist = split.args()
+        mylist = arg.split()
         if mylist[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[mylist[0]]()
- 
+        attrs = self.parser(mylist[1:])
+        for key, value in attrs.items():
+            setattr(new_instance, key, value)
         print(new_instance.id)
+        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
