@@ -115,27 +115,39 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
+    def parser(self, args):
+        """ modifies the args passed """
+        dic = {}
+        for arg in args:
+            if '=' in arg:
+                part = arg.split('=', 1)
+                key = part[0]
+                value = part[1]
+                if value[0] == value[-1] == '"':
+                    value = shlex.split(value)[0].replace('_', ' ')
+                else:
+                    try:
+                        value = int(value)
+                    except:
+                        try:
+                            value = float(value)
+                        except:
+                            continue
+                dic[key] = value
+        return (dic)
+
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
             print("** class name missing **")
             return
-        mylist = shlex.split(args)
+        mylist = split.args()
         if mylist[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[mylist[0]]()
  
         print(new_instance.id)
-
-        for i in range(1, len(mylist)):
-            mylist[i] = mylist[i].replace('=', ' ')
-            attrs = mylist[i].split(' ')
-            attrs[1] = attrs[1].replace('"', '\\"')
-            attrs[1] = attrs[1].replace('_', ' ')
-            if (type(attrs[1]) is not tuple):
-                setattr(new_instance, attrs[0], attrs[1])
-        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
