@@ -14,12 +14,6 @@ from models.review import Review
 import shlex
 
 
-classes = {
-               'User': User, 'Place': Place, 'State': State, 'City': City,
-               'Amenity': Amenity, 'Review': Review
-          }
-
-
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
@@ -126,7 +120,7 @@ class HBNBCommand(cmd.Cmd):
         dic = {}
         for arg in args:
             if '=' in arg:
-                part = arg.split('=', 1)
+                part = arg.split('=')
                 key = part[0]
                 value = part[1]
                 if value[0] == value[-1] == '"':
@@ -134,8 +128,7 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     try:
                         value = int(value)
-                    except:
-                        continue
+                    except ValueError:                        
                         try:
                             value = float(value)
                         except:
