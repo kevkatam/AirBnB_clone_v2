@@ -128,10 +128,10 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     try:
                         value = int(value)
-                    except ValueError:                        
+                    except ValueError:
                         try:
                             value = float(value)
-                        except:
+                        except ValueError:
                             continue
                 dic[key] = value
         return (dic)
@@ -141,7 +141,7 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             print("** class name missing **")
             return
-        mylist = arg.split()
+        mylist = shlex.split(arg)
         if mylist[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
