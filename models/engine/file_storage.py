@@ -38,6 +38,10 @@ class FileStorage:
             key = "{}.{}".format(obj.__class__.__name__, obj.id)
             del FileStorage.__objects[key]
 
+    def close(self):
+        """ method for deserializing the JSON file to objects """
+        self.reload()
+    
     def reload(self):
         """Loads storage dictionary from file"""
         from models.base_model import BaseModel
